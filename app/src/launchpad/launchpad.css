@@ -1,0 +1,12 @@
+.launchpad {
+  display: flex;
+  flex-direction: column;
+}
+
+.sliderPanel {
+  display: flex;
+  flex-direction: column;
+  margin:20px;
+  align-items: center;
+  width: 450px;
+}

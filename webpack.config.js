@@ -1,13 +1,17 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'src/public');
-var APP_DIR = path.resolve(__dirname, 'src/app');
+var isDebug = process.env.DEBUG == 'undefined' || process.env.DEBUG == 'true';
+
+var BUILD_DIR = path.resolve(__dirname, 'build');
+var APP_DIR = path.resolve(__dirname, 'app/src');
 
 var config = {
+  context: __dirname,
   entry: APP_DIR + '/index.js',
   output: {
     path: BUILD_DIR,
+    publicPath: BUILD_DIR + '/',
     filename: 'bundle.js'
   },
   module : {
@@ -20,7 +24,7 @@ var config = {
       {
         test : /\.css?/,
         include : APP_DIR,
-        loader : 'css-loader'
+        loader : 'style-loader!css-loader'
       },
       {
         test: /\.(jpg|png|svg|mp3)$/,
@@ -30,7 +34,10 @@ var config = {
         },
       }
     ]
-  }
+  },
+  plugins: isDebug ? [] : [
+    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
+  ]
 };
 
 module.exports = config;
