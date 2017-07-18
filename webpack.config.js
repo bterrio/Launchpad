@@ -36,8 +36,8 @@ var config = {
     ]
   },
   plugins: isDebug ? [] : [
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
-  ]
+  ],
+  devtool: 'source-map'
 };
 
 module.exports = config;

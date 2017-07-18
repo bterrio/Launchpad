@@ -1,5 +1,12 @@
+/* Global Styles */
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
   background-color: #00aadd;
+}
+
+/* Local styles */
+:local(.title) {
+  text-align: center;
+  color: yellow;
 }

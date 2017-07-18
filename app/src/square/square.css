@@ -1,4 +1,8 @@
-.square {
+:local(.square) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: yellow;
   background: #dd0000;
   height: 150px;
   width: 150px;
@@ -6,20 +10,20 @@
   box-sizing: border-box;
 }
 
-.square img {
-  width: 100%;
+:local(.square img) {
+  max-width: 100%;
   height: 100%;
 }
 
-.square:focus {
+:local(.square:focus) {
   outline: none;
 }
 
-.kbd-navigation .square:focus {
+:local(.kbd-navigation .square:focus) {
   background: #ddd;
 }
 
-.selected {
+:local(.selected) {
   background-color: #00ff00;
   animation-name: flashGreen;
 	animation-duration: 1s;
@@ -28,8 +32,16 @@
 	animation-timing-function: linear;
 }
 
-@keyframes flashGreen {
+:local(@keyframes flashGreen) {
 	to {
 		background-color: #00dd55;
 	}
+}
+
+:local(.customSquare) {
+  cursor: auto;
+}
+
+:local(.fileInput) {
+  display: none;
 }

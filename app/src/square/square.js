@@ -1,6 +1,6 @@
 import React from 'react';
 
-require('./square.css');
+import styles from './square.css';
 
 /**
  * [Square Render a clickable square]
@@ -8,11 +8,11 @@ require('./square.css');
  * @constructor
  */
 function Square(props) {
-  let className = props.selected ? 'square selected' : 'square';
+  let className = props.selected ? styles.square + ' ' + styles.selected : styles.square;
 
   return (
     <li className={className} onClick={props.onClick}>
-        <img src={require(`../../assets/${props.name}.png`)} alt={props.name}/>
+        {props.hasLocalFiles ? <img src={`app/assets/${props.name}.png`} alt={props.altText}/> : props.altText}
     </li>
   );
 }

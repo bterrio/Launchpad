@@ -1,12 +1,17 @@
-.launchpad {
+:local(.launchpad) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 450px;
+}
+
+:local(.boardPanel) {
   display: flex;
   flex-direction: column;
 }
 
-.sliderPanel {
+:local(.sliderPanel) {
   display: flex;
   flex-direction: column;
-  margin:20px;
-  align-items: center;
-  width: 450px;
+  margin: 20px;
 }

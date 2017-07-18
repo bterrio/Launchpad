@@ -1,6 +1,6 @@
 import React from 'react';
 
-require('./slider.css');
+import styles from './slider.css';
 
 /**
  * [Slider Render a slider]
@@ -13,9 +13,9 @@ function Slider(props) {
   }
 
   return (
-    <div className="sliderContainer">
+    <div className={styles.sliderContainer}>
       <span>{props.labelText}:</span>
-      <input className="slider" type="range" min={props.min} max={props.max} step={props.step} value={props.value} onChange={slide} />
+      <input type="range" min={props.min} max={props.max} step={props.step} value={props.value} onChange={slide} />
       <span>{props.value} {props.unit}</span>
     </div>
   );

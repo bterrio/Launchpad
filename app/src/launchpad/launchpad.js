@@ -1,9 +1,17 @@
 import React from 'react';
 
-require('./launchpad.css');
+import styles from './launchpad.css';
 var Board = require('../board/board.js');
 var Slider = require('../slider/slider.js');
 var SoundTimer = require('../soundTimer.js');
+
+require('app/assets/airhorn.mp3');
+require('app/assets/ambulance.mp3');
+require('app/assets/bell.mp3');
+require('app/assets/cat.mp3');
+require('app/assets/cricket.mp3');
+require('app/assets/slidewhistle.mp3');
+const localSounds = ['airhorn', 'ambulance', 'bell', 'cat', 'cricket', 'slidewhistle'];
 
 /**
  * [Launchpad The overall launchpad object]
@@ -13,36 +21,51 @@ class Launchpad extends React.Component {
   constructor() {
     super();
     this.state = {
-      squares: [],
+      squares: {},
       frequency: 2,
       probability: 100,
       volume: 50,
     }
+
+    // initialize state for local sound squares
+    for (let i=0; i < localSounds.length; i++) {
+      let localSound = localSounds[i];
+      this.state.squares[localSound] = {selected: false, soundTimer: null, soundFilePath: `app/assets/${localSound}.mp3`, altText: localSound};
+    }
   }
 
-  handleClick(index, name) {
-    const squares = this.state.squares.slice();
-    squares[index].selected = !squares[index].selected;
+  handleClick(name) {
+    const squares = Object.assign({}, this.state.squares);
+    squares[name].selected = !squares[name].selected;
 
-    if (!squares[index].soundTimer) {
-      let soundTimer = new SoundTimer(name, this.state.frequency, this.state.probability, this.state.volume);
-      soundTimer.Start();
-      squares[index].soundTimer = soundTimer;
+    if (!squares[name].soundTimer) {
+      let soundTimer = new SoundTimer(squares[name].soundFilePath, this.state.frequency, this.state.probability, this.state.volume);
+      soundTimer.Start(true);
+      squares[name].soundTimer = soundTimer;
     } else {
-      squares[index].soundTimer.Stop();
-      squares[index].soundTimer = null;
+      squares[name].soundTimer.Stop();
+      squares[name].soundTimer = null;
     }
 
     this.setState({squares: squares});
   }
 
+  handleFileChosen(name, value) {
+    const squares = Object.assign({}, this.state.squares);
+
+    let filePath = URL.createObjectURL(value);
+    squares[name] = {selected: false, soundTimer: null, soundFilePath: filePath, altText: value.name};
+
+    this.setState({squares: squares});
+  }
+
   handleSlide(sliderName, value) {
-    let squares = this.state.squares.slice();
-    for (let i=0; i < squares.length; i++) {
-      if (squares[i].soundTimer) {
-        squares[i].soundTimer.Stop();
-        squares[i].soundTimer[sliderName] = value;
-        squares[i].soundTimer.Start();
+    const squares = Object.assign({}, this.state.squares);
+    for (let key in squares) {
+      if (squares[key].soundTimer) {
+        squares[key].soundTimer.Stop();
+        squares[key].soundTimer[sliderName] = value;
+        squares[key].soundTimer.Start(false);
       }
     }
 
@@ -54,8 +77,8 @@ class Launchpad extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="sliderPanel">
+      <div className={styles.launchpad}>
+        <div className={styles.sliderPanel}>
           <Slider
             propertyName="frequency"
             labelText="Frequency"
@@ -87,10 +110,11 @@ class Launchpad extends React.Component {
             onSlide={(name, value) => this.handleSlide(name, value)}
           />
         </div>
-        <div className="launchpad">
+        <div className={styles.boardPanel}>
           <Board
             squares={this.state.squares}
-            onClick={(index, name) => this.handleClick(index, name)}
+            onClick={(name) => this.handleClick(name)}
+            onFileChosen={(name, value) => this.handleFileChosen(name, value)}
           />
         </div>
       </div>
